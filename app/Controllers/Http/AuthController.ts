@@ -26,7 +26,7 @@ export default class AuthController {
     const email = request.input('email')
     const password = request.input('password')
     const token = await auth.attempt(email, password)
-    response.send({ message: 'User logged in' })
+
     return token.toJSON()
   }
   public async logout({ auth, response }: HttpContextContract) {

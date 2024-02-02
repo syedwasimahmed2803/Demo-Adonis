@@ -14,7 +14,7 @@ export default class Profile extends BaseModel {
   @column()
   public gender: string
   @column()
-  public date_of_birth: DateTime
+  public date_of_birth: Date
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

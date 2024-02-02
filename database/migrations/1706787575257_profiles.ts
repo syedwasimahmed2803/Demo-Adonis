@@ -10,7 +10,7 @@ export default class Profiles extends BaseSchema {
       table.string('mobile_number').unique().notNullable()
       table.string('name').notNullable()
       table.string('gender')
-      table.string('date_of_birth')
+      table.date('date_of_birth')
       table.timestamps(true)
     })
   }
