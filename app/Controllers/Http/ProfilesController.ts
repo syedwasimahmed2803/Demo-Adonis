@@ -55,13 +55,13 @@ export default class ProfilesController {
     response.send('Profile Updated!')
   }
   public async deleteUserProfile({ response, auth }: HttpContextContract) {
-    try {
-      const user_id = auth.user?.id
-      const profile = await Profile.findOrFail(user_id)
+    const user_id = auth.user?.id
+    const profile = await Profile.query().where('user_id', user_id).first()
+    if (profile) {
       await profile.delete()
-      return response.send('Profile was deleted Successfully')
-    } catch (err) {
-      return response.send({ message: 'Profile not found' })
+      return response.send('Profile has been deleted')
+    } else {
+      return response.status(404).send('Profile Not Found')
     }
   }
 }
