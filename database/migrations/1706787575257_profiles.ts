@@ -5,11 +5,12 @@ export default class Profiles extends BaseSchema {
 
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('user_id').primary().references('users.id')
-      table.string('email').notNullable()
+      table.increments('id').primary()
+      table.integer('user_id').unsigned().references('users.id')
+      table.string('mobile_number').unique().notNullable()
       table.string('name').notNullable()
       table.string('gender')
-      table.string('Date Of Birth')
+      table.string('date_of_birth')
       table.timestamps(true)
     })
   }
