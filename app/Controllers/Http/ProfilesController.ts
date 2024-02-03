@@ -6,21 +6,24 @@ import user from 'App/Models/user'
 import { DateTime } from 'luxon'
 export default class ProfilesController {
   public async getUserProfile({ auth, response }: HttpContextContract) {
-    const userId = auth.user?.id
-    const profile = await Profile.findByOrFail('user_id', userId)
-    const formattedProfile = {
-      ...profile.serialize(),
-      date_of_birth: DateTime.fromJSDate(profile.date_of_birth).toFormat('yyyy-MM-dd'),
+    try {
+      const userId = auth.user?.id
+      const profile = await Profile.findByOrFail('user_id', userId)
+      const formattedProfile = {
+        ...profile.serialize(),
+        date_of_birth: DateTime.fromJSDate(profile.date_of_birth).toFormat('yyyy-MM-dd'),
+      }
+      const responseData = {
+        email: auth.user?.email,
+        name: formattedProfile.name,
+        date_of_birth: formattedProfile.date_of_birth,
+        gender: formattedProfile.gender,
+      }
+      return response.created(responseData)
+    } catch (error) {
+      return response.notFound({ message: 'Profile not found' })
     }
-    const responseData = {
-      email: auth.user?.email,
-      name: formattedProfile.name,
-      date_of_birth: formattedProfile.date_of_birth,
-      gender: formattedProfile.gender,
-    }
-    response.created(responseData)
   }
-
   public async createUserProfile({ request, response, auth }: HttpContextContract) {
     const validations = schema.create({
       gender: schema.enum(['Male', 'Female']),
